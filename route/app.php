@@ -21,6 +21,8 @@ Route::get(':version/game', ':version.game/index');
 
 Route::get(':version/match',':version.match/index');
 
+Route::get(':version/odds',':version.odds/index');
+
 
 Route::get(':version/history',':version.history/index');
 
@@ -42,3 +44,5 @@ Route::get(':version/getdata/team',':version.getdata/team');
 Route::get(':version/getdata/tournament',':version.getdata/tournament');
 
 Route::get(':version/getdata/oddsgroup',':version.getdata/oddsgroup');
+
+

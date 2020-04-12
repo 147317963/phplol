@@ -19,7 +19,7 @@ class Match extends BaseController
      */
   public function index(){
 
-
+     echo 123;
 
 
       $MatchModel = (new MatchModel())->index();
@@ -33,7 +33,6 @@ class Match extends BaseController
       $team = [];
       $odds = [];
 
-
       foreach ($MatchModel as $key=>$value){
 
 
@@ -45,17 +44,23 @@ class Match extends BaseController
                   $team[$v['pos']]=$v;
               }
           }
-          $MatchModel[$key]['team']=$team;
-
+          //判断数组是否有下标
+          if(count($team)){
+              $MatchModel[$key]['team']=$team;
+          }
 
           //获取匹配的比赛团队
           foreach ($OddsModel as $k=>$v){
-
-              if($value['id']===$v['match_id']){
+              //匹配团队后 并且match_stage=final  全场
+              if($value['id']===$v['match_id'] && $v['match_stage'] ==='final' ){
                   $odds[]=$v;
               }
           }
-          $MatchModel[$key]['odds']=$odds;
+          //判断数组是否有下标
+          if(count($odds)){
+              $MatchModel[$key]['odds']=$odds;
+          }
+
 
 
 
