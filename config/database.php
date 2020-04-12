@@ -27,7 +27,7 @@ return [
             // 用户名
             'username'          => env('database.username', 'jingji'),
             // 密码
-            'password'          => env('database.password', 'Tnw872yMX4aKZxaW'),
+            'password'          => env('database.password', 'wodiaocuo'),
             // 端口
             'hostport'          => env('database.hostport', '3306'),
             // 数据库连接参数

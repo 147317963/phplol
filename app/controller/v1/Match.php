@@ -19,7 +19,7 @@ class Match extends BaseController
      */
   public function index(){
 
-     echo 123;
+
 
 
       $MatchModel = (new MatchModel())->index();
@@ -78,12 +78,11 @@ class Match extends BaseController
        'datas'=>  $MatchModel
      ];
 
-//        dump($result);
-
 
 
 
       return json($data);
+
 
   }
 }
