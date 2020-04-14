@@ -14,7 +14,7 @@ Route::get('think', function () {
     return 'hello,ThinkPHP6!';
 });
 
-Route::get(':version/game', ':version.game/index');
+Route::get(':version/announcement', ':version.announcement/index');
 
 
 Route::get(':version/game', ':version.game/index');
