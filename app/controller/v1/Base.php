@@ -1,5 +1,5 @@
 <?php
-
+declare (strict_types = 1);
 namespace app\controller\v1;
 
 
@@ -45,10 +45,10 @@ class Base extends BaseController
 //            return;
 //        }
 
-        header('Access-Control-Allow-Origin: '.'*');
-        header('Access-Control-Allow-Credentials: true');
-        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-        header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization");
+//        header('Access-Control-Allow-Origin: '.'*');
+//        header('Access-Control-Allow-Credentials: true');
+//        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+//        header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization");
 
 //        if(request()->isOptions())  swoole_exit('错误');
 //

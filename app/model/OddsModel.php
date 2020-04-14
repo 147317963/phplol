@@ -16,14 +16,14 @@ class OddsModel extends Model
     public function index(){
 
 
-        $result = Cache::store('redis')->get($this->name);
-
-
-
-        if($result == null){
+//        $result = Cache::store('redis')->get($this->name);
+//
+//
+//
+//        if($result == null){
             $result = $this->column('*','id');
-            Cache::store('redis')->set($this->name,$result,60);
-        }
+//            Cache::store('redis')->set($this->name,$result,60);
+//        }
 
 
         return $result;

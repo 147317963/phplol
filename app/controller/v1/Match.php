@@ -1,5 +1,5 @@
 <?php
-
+declare (strict_types = 1);
 
 namespace app\controller\v1;
 
@@ -30,18 +30,18 @@ class Match extends BaseController
       $OddsModel = (new OddsModel())->index();
 
 
-      $team = [];
-      $odds = [];
+
 
       foreach ($MatchModel as $key=>$value){
 
-
+          $team = [];
+          $odds = [];
 
           //获取匹配的比赛团队
           foreach ($ScoreModel as $k=>$v){
 
               if($value['id']===$v['match_id']){
-                  $team[$v['pos']]=$v;
+                  $team[]=$v;
               }
           }
           //判断数组是否有下标
@@ -49,7 +49,7 @@ class Match extends BaseController
               $MatchModel[$key]['team']=$team;
           }
 
-          //获取匹配的比赛团队
+          //获取匹配的比赛团队赔率
           foreach ($OddsModel as $k=>$v){
               //匹配团队后 并且match_stage=final  全场
               if($value['id']===$v['match_id'] && $v['match_stage'] ==='final' ){

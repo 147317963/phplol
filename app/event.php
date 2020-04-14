@@ -10,6 +10,9 @@ return [
         'HttpEnd'  => [],
         'LogLevel' => [],
         'LogWrite' => [],
+//        'swoole.websocket.Test'=>[
+//            \app\listener\WebsocketTest::class
+//        ]
     ],
 
     'subscribe' => [
