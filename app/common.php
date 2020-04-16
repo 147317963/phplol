@@ -12,7 +12,22 @@
 // +----------------------------------------------------------------------
 
 // 应用公共文件
-
+//调用这个函数，将其幻化为数组，然后取出对应值
+function object_array($array)
+{
+    if(is_object($array))
+    {
+        $array = (array)$array;
+    }
+    if(is_array($array))
+    {
+        foreach($array as $key=>$value)
+        {
+            $array[$key] = object_array($value);
+        }
+    }
+    return $array;
+}
 
 /**
  * 字符串截取，支持中文和其他编码

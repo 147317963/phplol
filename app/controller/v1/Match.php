@@ -22,13 +22,11 @@ class Match extends BaseController
 
 
 
-      $MatchModel = (new MatchModel())->index();
+      $MatchModel = (new MatchModel())->getModelData();
 
+      $ScoreModel = (new ScoreModel())->getModelData();
 
-      $ScoreModel = (new ScoreModel())->index();
-
-      $OddsModel = (new OddsModel())->index();
-
+      $OddsModel = (new OddsModel())->getModelData();
 
 
 
@@ -44,6 +42,8 @@ class Match extends BaseController
                   $team[]=$v;
               }
           }
+            //解决Josn后边对象问题
+//          sort($team);
           //判断数组是否有下标
           if(count($team)){
               $MatchModel[$key]['team']=$team;
@@ -53,6 +53,7 @@ class Match extends BaseController
           foreach ($OddsModel as $k=>$v){
               //匹配团队后 并且match_stage=final  全场
               if($value['id']===$v['match_id'] && $v['match_stage'] ==='final' ){
+//                  $odds[]=$v;
                   $odds[]=$v;
               }
           }
@@ -60,9 +61,6 @@ class Match extends BaseController
           if(count($odds)){
               $MatchModel[$key]['odds']=$odds;
           }
-
-
-
 
       }
 
@@ -72,12 +70,10 @@ class Match extends BaseController
 
 
 
-
      $data=[
        'code'=>200,
-       'datas'=>  $MatchModel
+       'datas'=> $MatchModel
      ];
-
 
 
 

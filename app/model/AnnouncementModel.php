@@ -10,11 +10,10 @@ class AnnouncementModel extends Model
 {
     protected $name = 'announcement';
 
-    public function index(){
+    public function getModelData(){
 
 
         $result = $this->select();
-
 
         return $result;
 

@@ -13,16 +13,16 @@ class OddsGroupModel extends Model
 
 
 
-    private function index(){
+    public function getModelData(){
 
-        $result = Cache::store('redis')->get($this->name);
-
-
-
-        if($result == null){
-            $result = $this->column('*','id');
-            Cache::store('redis')->set($this->name,$result,60);
-        }
+//        $result = Cache::store('redis')->get($this->name);
+//
+//
+//
+//        if($result == null){
+        $result = $this->select();
+//            Cache::store('redis')->set($this->name,$result,60);
+//        }
 
 
         return $result;

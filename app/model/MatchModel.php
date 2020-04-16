@@ -17,14 +17,14 @@ class MatchModel extends Model
 
 
 
-    public function index(){
+    public function getModelData(){
 
 //        $result = Cache::store('redis')->get($this->name);
 
 
 
 //        if($result == null){
-            $result = $this->select();
+         $result = $this->select();
 //            Cache::store('redis')->set($this->name,$result,60);
 //        }
 

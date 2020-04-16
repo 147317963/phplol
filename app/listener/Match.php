@@ -32,12 +32,12 @@ class Match
 
 
 
-        $MatchModel = (new MatchModel())->index();
+        $MatchModel = (new MatchModel())->getModelData();
 
 
-        $ScoreModel = (new ScoreModel())->index();
+        $ScoreModel = (new ScoreModel())->getModelData();
 
-        $OddsModel = (new OddsModel())->index();
+        $OddsModel = (new OddsModel())->getModelData();
 
 
 

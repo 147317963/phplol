@@ -13,7 +13,7 @@ class OddsModel extends Model
 
 
 
-    public function index(){
+    public function getModelData(){
 
 
 //        $result = Cache::store('redis')->get($this->name);
@@ -21,7 +21,7 @@ class OddsModel extends Model
 //
 //
 //        if($result == null){
-            $result = $this->column('*','id');
+             $result = $this->select();
 //            Cache::store('redis')->set($this->name,$result,60);
 //        }
 
