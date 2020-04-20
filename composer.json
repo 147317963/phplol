@@ -26,7 +26,6 @@
         "jaeger/querylist": "^4.0",
         "topthink/think-swoole": "^3.0",
         "jaeger/querylist-curl-multi": "^4.0",
-        "zhuxinyuang/common": "^0.16.0",
         "lcobucci/jwt": "^3.3"
     },
     "require-dev": {

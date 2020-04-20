@@ -19,7 +19,12 @@ class Match
     public function __construct(Container $container)
     {
         $this->websocket = $container->make(Websocket::class);
-
+//        dump($this->websocket);
+//        $this->websocket->emit("matchCallback", $container);
+//        dump($container);
+        $this->websocket->join('match');
+//        dump($this->websocket->getSender());
+//        dump($this->websocket->getTo());
     }
 
     /**
@@ -77,15 +82,21 @@ class Match
         }
 
 
+
+//        dump($this->websocket->getTo());
+
+
+//        dump($event);
+//        $this->websocket->to('room')->emit("matchCallback", ['guangbo' => 1, 'getdata' => $event['asd']]);
         //回复客户端消息
-        $this->websocket->emit("matchCallback", $MatchModel);
+//        $this->websocket->emit("matchCallback",$this->websocket);
         //不同于HTTP模式，这里可以进行多次发送
         //$event 为从客户端接收的数据
 //        $this->websocket->emit("match", ['aaaaa' => 1, 'getdata' => $event['asd']]);
 //        //增加如下内容，表示进行对指定room进行群发
 //        $this->websocket->to('roomtest')->emit("testcallback", ['guangbo' => 1, 'getdata' => $event['asd']]);
 //        //指定客户端发送，假设已知某一客户端连接fd为1，则发送如何
-//        $this->websocket->setSender(1)->emit("testcallback", ['guangbo' => 1, 'getdata' => $event['asd']]);
+//        $this->websocket->setSender(12)->emit("matchCallback", ['guangbo' => 1, 'getdata' => $event['asd']]);
 //        //获取当前客户端fd
 //        $this->websocket->getSender();
 //        //关闭指定客户端连接，参数为fd，默认为当前链接

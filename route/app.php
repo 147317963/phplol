@@ -14,6 +14,10 @@ Route::get('think', function () {
     return 'hello,ThinkPHP6!';
 });
 
+//登录
+Route::post(':version/login/user', ':version.login/user');
+
+
 Route::get(':version/announcement', ':version.announcement/index');
 
 
@@ -21,8 +25,9 @@ Route::get(':version/game', ':version.game/index');
 
 Route::get(':version/match',':version.match/index');
 
-Route::get(':version/odds',':version.odds/index');
+Route::get(':version/odds/index',':version.odds/index');
 
+Route::get(':version/odds/updateodds',':version.odds/updateodds');
 
 Route::get(':version/history',':version.history/index');
 

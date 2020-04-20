@@ -8,18 +8,27 @@ use app\BaseController;
 use app\model\MatchModel;
 use app\model\OddsModel;
 use app\model\ScoreModel;
+use think\Container;
+use think\swoole\Websocket;
 
 class Odds extends BaseController
 {
 
+    public $websocket = null;
+
+    public function __construct(Container $container)
+    {
+        $this->websocket = $container->make(Websocket::class);
+    }
+
     public function index()
     {
-        $MatchModel = (new MatchModel())->index();
+        $MatchModel = (new MatchModel())->getModelData();
 
 
-        $ScoreModel = (new ScoreModel())->index();
+        $ScoreModel = (new ScoreModel())->getModelData();
 
-        $OddsModel = (new OddsModel())->index();
+        $OddsModel = (new OddsModel())->getModelData();
 
 
         $team = [];
@@ -66,4 +75,13 @@ class Odds extends BaseController
         return json($data);
     }
 
+    public function updateOdds(){
+        $result = (new OddsModel())->select()->toArray();
+        $data=[
+            'source'=>'odds',
+            'odds'=>$result
+        ];
+
+        $this->websocket->to('match')->emit('matchCallback',$data);
+    }
 }

@@ -7,8 +7,7 @@ use app\BaseController;
 
 use \Lcobucci\JWT\Parser;
 use \Lcobucci\JWT\Signer\Hmac\Sha256;
-use think\facade\Cache;
-use think\facade\Request;
+use think\db\exception\PDOException;
 
 
 class Base extends BaseController
@@ -20,9 +19,9 @@ class Base extends BaseController
 
     public array $code;
     //配置数据
-    public $webConfg;
+//    public $webConfg;
     //当前数据执行时间
-    public int $nowTime;
+//    public int $nowTime;
 
     public function initialize()
     {
@@ -60,37 +59,41 @@ class Base extends BaseController
 
 
 
-        //获取token
-//        $token = request()->header()['authorization'] ? request()->header()['authorization']: '';
+//        获取token
+        $token = request()->param('token') ? request()->param('token'): '';
 //        $token = input('token');
-//
-//
-//        if (!$token) {
-//            $data['code'] = config('code.login.erro');
-//            $data['msg'] = '温馨提示:请登录后查看';
-//            throw new \think\exception\HttpException(200, json_encode($data));
-//
-//        }
-//
-//        $parse = (new Parser())->parse($token);
-//        $signer  = new Sha256();
-//        //验证token合法性
-//        if (!$parse->verify($signer, config('code.secret'))) {
-//            $data['code'] = config('code.login.erro');
-//            $data['msg'] = '温馨提示:请登录后查看';
-//            throw new \think\exception\HttpException(200, json_encode($data));
-//        }
-//        //验证是否已经过期
-//        if ($parse->isExpired()) {
-//            $data['code'] = config('code.login.erro');
-//            $data['msg'] = '温馨提示:登录已失效';
-//            throw new \think\exception\HttpException(200, json_encode($data));
-//        }
-//        $this->uid = $parse->getClaim('uid');
-//        $this->username = $parse->getClaim('username');
-//
-//        //验证唯一设备登录  把旧用户踢下线
-//
+
+        if (!$token) {
+            $data['code'] = 401;
+            $data['message'] = '温馨提示:请登录后查看';
+            throw new \think\exception\HttpException(200, $data['message'],null,[],$data['code']);
+//            throw new \Swoole\ExitException(json_encode($data));
+
+        }
+
+        $parse = (new Parser())->parse($token);
+        $signer  = new Sha256();
+        //验证token合法性
+        if (!$parse->verify($signer, 'lljg_key')) {
+            $data['code'] = 401;
+            $data['message'] = '温馨提示:请登录后查看';
+            throw new \think\exception\HttpException(200, $data['message'],null,[],$data['code']);
+//            throw new \Swoole\ExitException(json_encode($data));
+
+        }
+        //验证是否已经过期
+        if ($parse->isExpired()) {
+            $data['code'] = 403;
+            $data['message'] = '温馨提示:登录已失效';
+            throw new \think\exception\HttpException(200, $data['message'],null,[],$data['code']);
+//            throw new \Swoole\ExitException(json_encode($data));
+
+        }
+        $this->uid = $parse->getClaim('uid');
+        $this->username = $parse->getClaim('username');
+
+        //验证唯一设备登录  把旧用户踢下线
+
 //        if(md5($token) != Cache::store('redis')->get(config('code.member.info').$this->username)['token']){
 //            $data['code'] = config('code.login.erro');
 //            $data['msg'] =  '温馨提示:您的会员账号已在其他终端登录。';

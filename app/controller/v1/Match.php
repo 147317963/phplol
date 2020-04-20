@@ -10,6 +10,7 @@ use app\BaseController;
 use app\model\MatchModel;
 use app\model\OddsModel;
 use app\model\ScoreModel;
+use app\model\TeamModel;
 use think\facade\Cache;
 
 class Match extends BaseController
@@ -26,6 +27,8 @@ class Match extends BaseController
 
       $ScoreModel = (new ScoreModel())->getModelData();
 
+      $TeamModel = (new TeamModel())->getModelData();
+
       $OddsModel = (new OddsModel())->getModelData();
 
 
@@ -36,11 +39,21 @@ class Match extends BaseController
           $odds = [];
 
           //获取匹配的比赛团队
-          foreach ($ScoreModel as $k=>$v){
+          foreach ($TeamModel as $k=>$v){
+
+              //获得匹配的比分
+              foreach ($ScoreModel as $s=>$score){
+
+                  if($value['id']===$score['match_id'] && $score['team_id'] == $score['team_id']){
+
+                  }
+
+              }
 
               if($value['id']===$v['match_id']){
                   $team[]=$v;
               }
+
           }
             //解决Josn后边对象问题
 //          sort($team);
