@@ -1,27 +1,25 @@
 <?php
 declare (strict_types = 1);
 
-namespace app\controller\v1;
+namespace app\controller\v2;
 
 
 
 
 use app\BaseController;
+use app\controller\Base;
 use app\model\MatchModel;
 use app\model\OddsModel;
 use app\model\ScoreModel;
 use app\model\TeamModel;
 use think\facade\Cache;
 
-class Match extends BaseController
+class Match extends Base
 {
-    /**获得比赛列表
+    /**获得自身比赛
      * @return \think\response\Json
      */
   public function index(){
-
-
-
 
       $MatchModel = (new MatchModel())->getModelData();
 
@@ -55,7 +53,7 @@ class Match extends BaseController
               }
 
           }
-            //解决Josn后边对象问题
+          //解决Josn后边对象问题
 //          sort($team);
           //判断数组是否有下标
           if(count($team)){
@@ -79,6 +77,9 @@ class Match extends BaseController
 
 
 
+
+
+
 //    dump(json($MatchModel));
 
 
@@ -92,6 +93,10 @@ class Match extends BaseController
 
       return json($data);
 
+
+  }
+  //创建比赛
+  public function createMatch(){
 
   }
 }

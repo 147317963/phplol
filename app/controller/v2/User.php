@@ -1,26 +1,22 @@
 <?php
-//declare (strict_types = 1);
+declare (strict_types = 1);
 
-namespace app\controller\v1;
+namespace app\controller\v2;
 
 
-use app\BaseController;
+use app\controller\Base;
 use app\model\UserModel;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use think\facade\Cache;
 
-
-class Login extends BaseController
+class User extends Base
 {
 
-    //用户登录
-    public function user()
-    {
+
+
+    public function login(){
         $nowTime = time();
-//      request()->param('password');
-//      $request->param('sid');
-//      Request()->param();
         $username = request()->param('username');
         $password = request()->param('password');
 
@@ -29,7 +25,7 @@ class Login extends BaseController
 
 
         //获取当前用户信息以便核实
-        $user = $this->getCache(config('apicanche.user.info'), $username);
+        $user = (new UserModel())->getCache($username);
 
 
         //判断密码正确和禁止登陆
@@ -67,7 +63,7 @@ class Login extends BaseController
         $user->token = md5($token['token']);
         $user->allowField(['token'])->save();
 
-        Cache::store('redis')->set(config('apicanche.user.info') . $username, $user, config('apicanche.user.expire'));
+
 
         //有动作就更新
 //        $user['update_time'] = date('Y-m-d h:i:s', $nowTime);
@@ -95,28 +91,33 @@ class Login extends BaseController
             'exp' => $nowTime + config('apicanche.login.expire'),
         ];
         return json($data);
-
     }
 
-    public function register()
-    {
 
+
+    public function logout(){
+        $data = [
+            'code' => 200,
+            'message' => '退出成功!',
+        ];
+        return json($data);
     }
 
-    private function getCache(string $keys, string $username)
-    {
-        $result = Cache::store('redis')->get($keys . $username);
-
-        if ($result == null) {
-            $result = (new UserModel())->where(['username' => $username])->find();
-            if ($result != null) {
-                //不是空的值就缓存
-                Cache::store('redis')->set($keys . $username, $result, config('apicanche.user.expire'));
-
-
-            }
-        }
-        return $result;
+    /**获取用户信息
+     * @return \think\response\Json
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function getInfo(){
+        $result = (new UserModel())->getCache($this->username);
+        $data = [
+            'code' => 200,
+            'result' => $result
+        ];
+        return json($data);
     }
+
+
 
 }

@@ -76,9 +76,10 @@ class Odds extends BaseController
     }
 
     public function updateOdds(){
-        $result = (new OddsModel())->select()->toArray();
+        $result = (new OddsModel())->field('id,update_time,match_id,status,odds')->select()->toArray();
         $data=[
-            'source'=>'odds',
+//            'source'=>'match',//更新比赛状态 传送 id,status
+            'source'=>'odds',//更新赔率   id,update_time,match_id,status,odds
             'odds'=>$result
         ];
 

@@ -1,7 +1,7 @@
 <?php
 declare (strict_types=1);
 
-namespace app\controller\v1;
+namespace app\controller\v2;
 
 
 use app\BaseController;
