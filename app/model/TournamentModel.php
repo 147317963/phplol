@@ -4,6 +4,7 @@
 namespace app\model;
 
 
+use think\facade\Cache;
 use think\Model;
 
 class TournamentModel extends Model
@@ -21,6 +22,14 @@ class TournamentModel extends Model
 //    {
 //        return date('Y-m-d',time());
 //    }
+
+//查询后
+    public static function onAfterRead($data)
+    {
+        Cache::store('redis')->hSet(config('apicanche.tournament.hash'),$data['id'], $data);
+    }
+
+
     public function getModelData(){
 
 

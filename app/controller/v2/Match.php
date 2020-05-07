@@ -1,102 +1,111 @@
 <?php
-declare (strict_types = 1);
+declare (strict_types=1);
 
 namespace app\controller\v2;
 
 
-
-
-use app\BaseController;
 use app\controller\Base;
 use app\model\MatchModel;
-use app\model\OddsModel;
-use app\model\ScoreModel;
-use app\model\TeamModel;
+use app\model\UserModel;
+use app\validate\MatchValidate;
 use think\facade\Cache;
+use think\Request;
+
 
 class Match extends Base
 {
     /**获得自身比赛
      * @return \think\response\Json
      */
-  public function index(){
+    public function getList()
+    { //开发完毕
 
-      $MatchModel = (new MatchModel())->getModelData();
+        $paging = Request()->only(['page', 'limit', 'sort', 'status', 'game_name']);
+        $map[] = ['uid', '=', $this->uid];
+        //判断该变量key是否存在            //判断该key是否为空
+        if (isset($paging['status']) && !empty($paging['status'])) {
+            $map[] = ['status', '=', $paging['status']];
+        }
+        //判断该变量key是否存在            //判断该key是否为空
+        if (isset($paging['game_name']) && !empty($paging['game_name'])) {
+            //模糊查询
+            $map[] = ['game_name', 'like', '%' . $paging['game_name'] . '%'];
+        }
 
-      $ScoreModel = (new ScoreModel())->getModelData();
-
-      $TeamModel = (new TeamModel())->getModelData();
-
-      $OddsModel = (new OddsModel())->getModelData();
-
-
-
-      foreach ($MatchModel as $key=>$value){
-
-          $team = [];
-          $odds = [];
-
-          //获取匹配的比赛团队
-          foreach ($TeamModel as $k=>$v){
-
-              //获得匹配的比分
-              foreach ($ScoreModel as $s=>$score){
-
-                  if($value['id']===$score['match_id'] && $score['team_id'] == $score['team_id']){
-
-                  }
-
-              }
-
-              if($value['id']===$v['match_id']){
-                  $team[]=$v;
-              }
-
-          }
-          //解决Josn后边对象问题
-//          sort($team);
-          //判断数组是否有下标
-          if(count($team)){
-              $MatchModel[$key]['team']=$team;
-          }
-
-          //获取匹配的比赛团队赔率
-          foreach ($OddsModel as $k=>$v){
-              //匹配团队后 并且match_stage=final  全场
-              if($value['id']===$v['match_id'] && $v['match_stage'] ==='final' ){
-//                  $odds[]=$v;
-                  $odds[]=$v;
-              }
-          }
-          //判断数组是否有下标
-          if(count($odds)){
-              $MatchModel[$key]['odds']=$odds;
-          }
-
-      }
+        $result = (new MatchModel())->where($map)->order("{$paging['sort']} desc")->paginate([
+            'list_rows' => $paging['limit'],
+            'page' => $paging['page']
+        ]);
 
 
+        $data = [
+            'code' => 200,
+            'result' => $result
+        ];
 
 
+        return json($data);
 
 
-//    dump(json($MatchModel));
+    }
+
+    //创建比赛
+    public function create()
+    {
+
+        $MatchModel = new MatchModel();
+        $data = Request()->only(['game_id', 'game_name', 'round', 'start_time', 'end_time', 'status', 'tournament_id', 'tournament_name', 'tournament_short_name']);
+
+        $validate = new MatchValidate();
+        $result = $validate->scene('create')->check($data);
+        if (!$result) {
+            return json($validate->getError());
+        }
+        $gamelist = Cache::store('redis')->hGetall(config('apicanche.game.hash'));
+        $tournamentlist = Cache::store('redis')->hGetall(config('apicanche.tournament.hash'));
+        if (!isset($gamelist[$data['game_id']]) || $gamelist[$data['game_id']]['game_name'] != $data['game_name']) {
+            return json(['code' => 500, 'message' => '参数1不匹配']);
+        }
+        if (!isset($tournamentlist[$data['tournament_id']]) || $tournamentlist[$data['tournament_id']]['tournament_name'] != $data['tournament_name'] || $tournamentlist[$data['tournament_id']]['tournament_short_name'] != $data['tournament_short_name']) {
+            return json(['code' => 500, 'message' => '参数2不匹配']);
+        }
+//       dump($gamelist[$data['game_id']]);
+
+//      $MatchModel->save($data);
 
 
+    }
 
-     $data=[
-       'code'=>200,
-       'result'=> $MatchModel
-     ];
+    public function update()
+    {
 
+        //自检测更新
+        $data = Request()->only(['id', 'start_time', 'end_time', 'status']);
 
+        $validate = new MatchValidate();
 
-      return json($data);
+        $result = $validate->scene('update')->check($data);
 
+        if (!$result) {
 
-  }
-  //创建比赛
-  public function createMatch(){
+            return json($validate->getError());
+        }
 
-  }
+        $MatchModel = (new MatchModel())->where(['id' => $data['id'], 'username' => $this->username])->find();
+
+        if ($MatchModel) {
+
+            if ($MatchModel->status == 3) {
+
+                return json(['code' => config('apicanche.erro'), 'message' => '赛事状态已经结束无法更新操作']);
+            }
+        } else {
+
+            return json(['code' => config('apicanche.erro'), 'message' => '无法匹配到赛事']);
+        }
+
+        $MatchModel->allowField(['start_time', 'end_time', 'status'])->save($data);
+
+        return json(['code' => config('apicanche.succeed'), 'message' => '更新比赛成功']);
+    }
 }

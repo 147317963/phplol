@@ -7,7 +7,7 @@ namespace app\controller\v1;
 use app\controller\Base;
 use app\model\UserModel;
 
-class user extends Base
+class User extends Base
 {
 
     public function info(){

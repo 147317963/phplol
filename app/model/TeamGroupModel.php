@@ -6,7 +6,7 @@ namespace app\model;
 
 use think\Model;
 
-class TeamGroup extends Model
+class TeamGroupModel extends Model
 {
     protected $name = 'team_group';
 

@@ -39,4 +39,12 @@ class OddsModel extends Model
         return $result;
 
     }
+
+    //更新model数据后 把数据缓存到redis
+    public static function onBeforeUpdate($odds)
+    {
+//        Cache::store('redis')->set(config('apicanche.user.info') . $user['username'], $user, config('apicanche.user.expire'));
+
+
+    }
 }

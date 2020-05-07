@@ -5,16 +5,15 @@ namespace app\controller\v2;
 
 
 use app\BaseController;
-use app\model\GameModel;
-use think\facade\Cache;
+use app\model\TeamGroupModel;
 
-class Game extends BaseController
+
+class Teamgroup extends BaseController
 {
     public function getList()
     {
 
-        $result = Cache::store('redis')->hGetall(config('apicanche.game.hash'));
-        $result = count($result)==0?(new GameModel())->order('id desc')->select():Cache::store('redis')->hGetall(config('apicanche.game.hash'));
+        $result = (new TeamGroupModel())->select();
 
         $data = [
             'code' => 200,

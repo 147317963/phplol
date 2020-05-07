@@ -12,9 +12,9 @@ use think\facade\Cache;
 class Base extends BaseController
 {
     //用户的UID
-    public int $uid;
+    public  $uid;
     //用户名
-    public string $username;
+    public  $username;
 
     //配置数据
 //    public $webConfg;
@@ -62,11 +62,10 @@ class Base extends BaseController
 
 
 //        获取token
-        $token = request()->header('Authorization') ? request()->header('Authorization'): '';
+        $token = request()->header('Authorization') ??'';
 //        $token = input('token');
-
+        $data['code'] = config('apicanche.login.erro');
         if (!$token) {
-            $data['code'] = config('apicanche.login.erro');
             $data['message'] = '温馨提示:请登录后查看';
             throw new \think\exception\HttpException(200, $data['message'],null,[],$data['code']);
 //            throw new \Swoole\ExitException(json_encode($data));
@@ -77,7 +76,6 @@ class Base extends BaseController
         $signer  = new Sha256();
         //验证token合法性
         if (!$parse->verify($signer, config('apicanche.secret'))) {
-            $data['code'] = config('apicanche.login.erro');
             $data['message'] = '温馨提示:请登录后查看';
             throw new \think\exception\HttpException(200, $data['message'],null,[],$data['code']);
 //            throw new \Swoole\ExitException(json_encode($data));
@@ -85,7 +83,6 @@ class Base extends BaseController
         }
         //验证是否已经过期
         if ($parse->isExpired()) {
-            $data['code'] = config('apicanche.login.erro');
             $data['message'] = '温馨提示:登录已失效';
             throw new \think\exception\HttpException(200, $data['message'],null,[],$data['code']);
 //            throw new \Swoole\ExitException(json_encode($data));
@@ -95,9 +92,9 @@ class Base extends BaseController
         $this->username = $parse->getClaim('username');
 
         //验证唯一设备登录  把旧用户踢下线
+        $cache  =Cache::store('redis')->hGet(config('apicanche.user.hash'),$this->username);
 
-        if(md5($token) != (new UserModel())->getCache($this->username)['token']){
-            $data['code'] = config('apicanche.login.erro');
+        if(md5($token) !== $cache['token']){
             $data['message'] =  '温馨提示:您的会员账号已在其他终端登录。';
             throw new \think\exception\HttpException(200, $data['message'],null,[],$data['code']);
         }

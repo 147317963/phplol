@@ -14,20 +14,17 @@ declare (strict_types = 1);
 
 // 应用公共文件
 
-/**
- * @param int $code
- * @param string $message
- * @param array $data
- * @param int $httpStatus
- * @return \think\response\Json
- */
-function show(int $code,string $message = 'error',array $data = null,int $httpStatus = 200){
 
-    $result=[
-        'code'=>$code,
-        'message'=>$message,
-        'result'=>$data
-    ];
-//    return json($result,$httpStatus);
-    return json($result);
+
+/**获得到搜索目标的所在的key   成功返回key   失败返回-1
+ * @param $target
+ * @param array $array
+ * @return int
+ */
+function find_index($target,array $array):int
+{
+    foreach($array as $key => $val){
+        if(array_search($target, $val)) return (int)$key;
+    }
+    return -1;
 }

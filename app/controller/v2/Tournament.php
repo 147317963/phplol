@@ -5,16 +5,15 @@ namespace app\controller\v2;
 
 
 use app\BaseController;
-use app\model\GameModel;
-use think\facade\Cache;
+use app\model\TournamentModel;
 
-class Game extends BaseController
+
+class Tournament extends BaseController
 {
     public function getList()
     {
 
-        $result = Cache::store('redis')->hGetall(config('apicanche.game.hash'));
-        $result = count($result)==0?(new GameModel())->order('id desc')->select():Cache::store('redis')->hGetall(config('apicanche.game.hash'));
+        $result = (new TournamentModel())->select();
 
         $data = [
             'code' => 200,
@@ -70,7 +69,6 @@ class Game extends BaseController
 //            }]};
 
    }
-
     //创建比赛
     public function create(){
 

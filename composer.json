@@ -1,14 +1,4 @@
 {
-    "name": "topthink/think",
-    "description": "the new thinkphp framework",
-    "type": "project",
-    "keywords": [
-        "framework",
-        "thinkphp",
-        "ORM"
-    ],
-    "homepage": "http://thinkphp.cn/",
-    "license": "Apache-2.0",
     "authors": [
         {
             "name": "liu21st",
@@ -17,21 +7,8 @@
         {
             "name": "yunwuxin",
             "email": "448901948@qq.com"
-        }        
+        }
     ],
-    "require": {
-        "php": ">=7.1.0",
-        "topthink/framework": "^6.0.0",
-        "topthink/think-orm": "^2.0",
-        "jaeger/querylist": "^4.0",
-        "topthink/think-swoole": "^3.0",
-        "jaeger/querylist-curl-multi": "^4.0",
-        "lcobucci/jwt": "^3.3"
-    },
-    "require-dev": {
-        "symfony/var-dumper": "^4.2",
-        "topthink/think-trace":"^1.0"
-    },
     "autoload": {
         "psr-4": {
             "app\\": "app"
@@ -43,16 +20,39 @@
     "config": {
         "preferred-install": "dist"
     },
+    "description": "the new thinkphp framework",
+    "homepage": "http://thinkphp.cn/",
+    "keywords": [
+        "framework",
+        "thinkphp",
+        "ORM"
+    ],
+    "license": "Apache-2.0",
+    "name": "topthink/think",
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://mirrors.aliyun.com/composer/"
+        }
+    },
+    "require": {
+        "php": ">=7.1.0",
+        "topthink/framework": "^6.0.0",
+        "topthink/think-orm": "^2.0",
+        "jaeger/querylist": "^4.0",
+        "topthink/think-swoole": "^3.0",
+        "jaeger/querylist-curl-multi": "^4.0",
+        "lcobucci/jwt": "^3.3"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^4.2",
+        "topthink/think-trace": "^1.0"
+    },
     "scripts": {
         "post-autoload-dump": [
             "@php think service:discover",
             "@php think vendor:publish"
         ]
     },
-    "repositories": {
-        "packagist": {
-            "type": "composer",
-            "url": "https://mirrors.aliyun.com/composer/"
-        }
-    }
+    "type": "project"
 }

@@ -14,7 +14,13 @@ class User extends Base
 {
 
 
-
+    /**登录
+     * @return \think\response\Json
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
     public function login(){
         $nowTime = time();
         $username = request()->param('username');
@@ -24,8 +30,12 @@ class User extends Base
         $password = openssl_decrypt(base64_decode($password), "AES-128-CBC", config('apicanche.key'), OPENSSL_RAW_DATA, config('apicanche.iv'));
 
 
-        //获取当前用户信息以便核实
-        $user = (new UserModel())->getCache($username);
+        //获取当前用户缓存以便核实
+        $user = Cache::store('redis')->hGet(config('apicanche.user.hash'),$username);
+        if(empty($user)){
+            //没有缓存到数据库里面查询
+            $user = (new UserModel())->where(['username'=>$username])->find();
+        }
 
 
         //判断密码正确和禁止登陆
@@ -57,11 +67,17 @@ class User extends Base
         ->getToken();
         $token['token'] = (string)$Builder;//获取加密后的token，转为字符串
 
-//     return
+        //查询后返回对象模型
+//        $userModel = UserModel::where(['id'=>$user['id']])->find();
+//        //更新用户一些信息到缓存 以便使用
+//        $userModel->update_time=date('Y-m-d H:i:s');
+//        $userModel->token = md5($token['token']);
+//        //更新
+//        $userModel->allowField(['token','update_time'])->save();
+         $user->token = md5($token['token']);
+         $user->update_time=date('Y-m-d H:i:s');
 
-        //更新用户一些信息到缓存 以便使用
-        $user->token = md5($token['token']);
-        $user->allowField(['token'])->save();
+         $user->allowField(['token','update_time'])->save();
 
 
 
@@ -94,7 +110,9 @@ class User extends Base
     }
 
 
-
+    /**退出
+     * @return \think\response\Json
+     */
     public function logout(){
         $data = [
             'code' => 200,
@@ -110,7 +128,7 @@ class User extends Base
      * @throws \think\db\exception\ModelNotFoundException
      */
     public function getInfo(){
-        $result = (new UserModel())->getCache($this->username);
+        $result = Cache::store('redis')->hGet(config('apicanche.user.hash'),$this->username);
         $data = [
             'code' => 200,
             'result' => $result
