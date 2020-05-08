@@ -4,16 +4,15 @@ namespace app\validate;
 
 use think\Validate;
 
-class MemberValidate extends Validate
+class UserValidate extends Validate
 {
     protected $regex = [
         'username' => '/^[a-zA-Z0-9_]{6,16}$/',
 
-        'password'=>'/^[a-zA-Z0-9]{6,16}$/',
+        'password'=>'/^[a-zA-Z0-9=]{6,24}$/',
 
-        'cpassword'=>'/^[a-zA-Z0-9]{6,16}$/',
 
-        'name'=>'/^([\xe4-\xe9][\x80-\xbf]{2}){2,4}$/',
+        'name'=>'/^([\xe4-\xe9][\x80-\xbf]{2}){2,6}$/',
 
         'qq'=>'/^[0-9]{5,20}$/',
 
@@ -47,11 +46,11 @@ class MemberValidate extends Validate
         'id.number'=>'参数错误',
 
         //账号
-        'username.require' => '用户不能为空',
-        'username.regex' => '帐号由6到16位只能是字母或数字_',
+        'username.require' => ['code'=>500,'message' => '用户 不能为空'],
+        'username.regex' => ['code'=>500,'message' => '帐号由6到16位只能是字母或数字_'],
         //密码
-        'password.require' => '密码不能为空',
-        'password.regex' => '密码(6-16位数字和字母)',
+        'password.require' => ['code'=>500,'message' => '密码 不能为空'],
+        'password.regex' => ['code'=>500,'message' => '密码(6-16位数字和字母)'],
 
         //确认密码
         'cpassword.require' => '密码不能为空',
@@ -59,8 +58,8 @@ class MemberValidate extends Validate
         'cpassword.confirm'=> '密码和确认密码不一致',
 
         //修改密码
-        'oldpassword.confirm' => '旧密码',
-        'oldpassword.confirm' => '密码和确认密码不一致',
+//        'oldpassword.confirm' => '旧密码',
+//        'oldpassword.confirm' => '密码和确认密码不一致',
         'newpassword.require' => '新密码不能为空',
         'newpassword.regex' => '新密码(6-16位数字和字母)',
 
@@ -68,7 +67,7 @@ class MemberValidate extends Validate
 
 
         'name.require'     => '姓名不能为空',
-        'name.regex' => '必须填写真实姓名2-3位,方便取款字',
+        'name.regex' => '必须填写真实姓名2-6位,方便取款字',
         'qq.require'   => 'QQ不能为空',
         'qq.regex'   => '请输QQ号码5-20位',
 
@@ -89,7 +88,7 @@ class MemberValidate extends Validate
 
     ];
     protected $scene = [
-        'user'   =>  ['username','password'],//登录
+        'login'   =>  ['username','password'],//登录
 
         'register'  =>  ['username','password','cpassword','name','qq','uid'],//注册
 

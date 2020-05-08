@@ -6,6 +6,7 @@ namespace app\controller\v2;
 
 use app\controller\Base;
 use app\model\UserModel;
+use app\validate\UserValidate;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use think\facade\Cache;
@@ -26,6 +27,14 @@ class User extends Base
         $username = request()->param('username');
         $password = request()->param('password');
 
+        $validate = new UserValidate();
+
+        $result = $validate->scene('login')->check(compact('username','password'));
+//        dump($result);
+        if (!$result) {
+
+            return json($validate->getError());
+        }
 
         $password = openssl_decrypt(base64_decode($password), "AES-128-CBC", config('apicanche.key'), OPENSSL_RAW_DATA, config('apicanche.iv'));
 
