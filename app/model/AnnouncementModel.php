@@ -21,12 +21,5 @@ class AnnouncementModel extends Model
 //        return date('Y-m-d',time());
 //    }
 
-    public function getModelData(){
 
-
-        $result = $this->select();
-
-        return $result;
-
-    }
 }

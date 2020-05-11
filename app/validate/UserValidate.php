@@ -12,7 +12,7 @@ class UserValidate extends Validate
         'password'=>'/^[a-zA-Z0-9=]{6,24}$/',
 
 
-        'name'=>'/^([\xe4-\xe9][\x80-\xbf]{2}){2,6}$/',
+        'name'=>'/^([\xe4-\xe9][\x80-\xbf]{2}){2,4}$/',
 
         'qq'=>'/^[0-9]{5,20}$/',
 
@@ -67,7 +67,7 @@ class UserValidate extends Validate
 
 
         'name.require'     => '姓名不能为空',
-        'name.regex' => '必须填写真实姓名2-6位,方便取款字',
+        'name.regex' => '必须填写真实姓名2-3位,方便取款字',
         'qq.require'   => 'QQ不能为空',
         'qq.regex'   => '请输QQ号码5-20位',
 

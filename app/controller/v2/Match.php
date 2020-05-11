@@ -28,9 +28,9 @@ class Match extends Base
             $map[] = ['status', '=', $paging['status']];
         }
         //判断该变量key是否存在            //判断该key是否为空
-        if (isset($paging['game_name']) && !empty($paging['game_name'])) {
+        if (isset($paging['match_name']) && !empty($paging['match_name'])) {
             //模糊查询
-            $map[] = ['game_name', 'like', '%' . $paging['game_name'] . '%'];
+            $map[] = ['match_name', 'like', '%' . $paging['match_name'] . '%'];
         }
         //如果key不存在      或者       key为空                       不是数字
         if (!isset($paging['page']) || empty($paging['page']) || !is_numeric($paging['page'])) {
