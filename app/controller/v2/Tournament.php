@@ -10,7 +10,7 @@ use app\model\TournamentModel;
 
 class Tournament extends BaseController
 {
-    public function getList()
+    public function index()
     {
 
         $result = (new TournamentModel())->select();

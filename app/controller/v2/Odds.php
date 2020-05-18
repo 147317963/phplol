@@ -13,7 +13,7 @@ class Odds extends Base
     /**获得自身比赛
      * @return \think\response\Json
      */
-    public function getList()
+    public function index()
     { //开发完毕
 
         $paging = Request()->only(['page', 'limit', 'sort', 'status', 'odds_group_name']);
@@ -42,10 +42,12 @@ class Odds extends Base
             $paging['sort'] = 'o.'.$paging['sort'];
         }
 
-        $result = (new OddsModel())->alias('o')->field('o.*,m.game_name,m.tournament_name')->leftJoin('think_match m','o.match_id = m.id')->where($map)->order("{$paging['sort']} desc")->paginate([
-            'list_rows' => $paging['limit'],
-            'page' => $paging['page']
-        ]);
+        $result = (new OddsModel())->alias('o')->field('o.*,m.game_name,m.tournament_name')
+            ->leftJoin('think_match m','o.match_id = m.id')->where($map)->order("{$paging['sort']} desc")
+            ->paginate([
+                'list_rows' => $paging['limit'],
+                'page' => $paging['page']
+            ]);
 
 
         $data = [

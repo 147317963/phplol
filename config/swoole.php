@@ -61,7 +61,7 @@ return [
         ],
     ],
     'hot_update' => [
-        'enable'  => env('APP_DEBUG', true),
+        'enable'  => env('APP_DEBUG', false),
         'name'    => ['*.php'],
         'include' => [app_path()],
         'exclude' => [],

@@ -16,11 +16,11 @@ class Announcement extends BaseController
 
 
 
-        $result = (new AnnouncementModel())->select()->toArray();
+        $result = (new AnnouncementModel())->select();
 
         $data=[
             'code'=>200,
-            'datas'=>  $result
+            'result'=>  $result
         ];
 
         return json($data);

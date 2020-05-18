@@ -12,11 +12,11 @@ class Game extends BaseController
     public function index()
     {
 
-        $result = (new GameModel())->select()->toArray();
+        $result = (new GameModel())->select();
 
         $data = [
             'code' => 200,
-            'datas' => $result
+            'result' => $result
         ];
 
         return json($data);

@@ -10,11 +10,11 @@ use think\facade\Cache;
 
 class Game extends BaseController
 {
-    public function getList()
+    public function index()
     {
 
-        $result = Cache::store('redis')->hGetall(config('apicanche.game.hash'));
-        $result = count($result)==0?(new GameModel())->order('id desc')->select():Cache::store('redis')->hGetall(config('apicanche.game.hash'));
+
+        $result = (new GameModel())->select();
 
         $data = [
             'code' => 200,

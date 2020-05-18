@@ -5,7 +5,9 @@ namespace app\controller\v2;
 
 
 use app\controller\Base;
+use app\controller\middleware\Validate;
 use app\model\UserModel;
+use app\Request;
 use app\validate\UserValidate;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
@@ -22,15 +24,18 @@ class User extends Base
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function login(){
+    public function login(Request $request)
+    {
         $nowTime = time();
-        $username = request()->param('username');
-        $password = request()->param('password');
+
+        $username = $request->param('username');
+
+        $password = $request->param('password');
 
         $validate = new UserValidate();
 
         $result = $validate->scene('login')->check(compact('username','password'));
-//        dump($result);
+
         if (!$result) {
 
             return json($validate->getError());
@@ -40,12 +45,14 @@ class User extends Base
 
 
         //获取当前用户缓存以便核实
-        $user = Cache::store('redis')->hGet(config('apicanche.user.hash'),$username);
-        if(empty($user)){
-            //没有缓存到数据库里面查询
-            $user = (new UserModel())->where(['username'=>$username])->find();
-        }
-
+//        $user = Cache::store('redis')->hGet(config('apicanche.user.hash'),$username);
+//        if(empty($user)){
+//            //没有缓存到数据库里面查询
+//            $user = (new UserModel())->where(['username'=>$username])->find();
+//        }
+//        $map[]=['username','=',$username];
+//        $map[]=['roles','in','admin,agent'];
+        $user = (new UserModel())->where(['username'=>$username])->find();
 
         //判断密码正确和禁止登陆
         if (empty($user)) {
@@ -60,13 +67,17 @@ class User extends Base
             $data['code'] = config('apicanche.erro');
             $data['message'] = '账号禁止登录';
             return json($data);
+        } else if (empty($user['roles'])) {
+            $data['code'] = config('apicanche.erro');
+            $data['message'] = '抱歉你账号无权限登录';
+            return json($data);
         }
         //生成token
         $signer = new Sha256();
         //设置header和payload，以下的字段都可以自定义
         $Builder = (new Builder())->setIssuer('www.llgj.vip')//发布者
         ->setAudience('www.llgj.vip')//接收者
-        ->setId("abc", true)//对当前token设置的标识
+        ->setId("4f1g23a12aa", true)//对当前token设置的标识
         ->setIssuedAt($nowTime)//token创建时间
         ->setExpiration($nowTime + config('apicanche.login.expire'))//过期时间
         ->setNotBefore($nowTime)//当前时间在这个时间前，token不能使用
@@ -87,6 +98,7 @@ class User extends Base
          $user->update_time=date('Y-m-d H:i:s');
 
          $user->allowField(['token','update_time'])->save();
+
 
 
 
@@ -137,7 +149,7 @@ class User extends Base
      * @throws \think\db\exception\ModelNotFoundException
      */
     public function getInfo(){
-        $result = Cache::store('redis')->hGet(config('apicanche.user.hash'),$this->username);
+        $result = (new UserModel())->where(['username'=>$this->username])->find();
         $data = [
             'code' => 200,
             'result' => $result

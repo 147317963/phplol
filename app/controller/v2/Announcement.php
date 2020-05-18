@@ -16,7 +16,7 @@ class Announcement extends Base
      * @return \think\response\Json
      */
 
-    public function getList()
+    public function index()
     { //开发完毕
 
         $paging = Request()->only(['page', 'limit', 'sort']);

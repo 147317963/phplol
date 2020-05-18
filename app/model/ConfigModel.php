@@ -8,5 +8,5 @@ use think\Model;
 
 class ConfigModel extends Model
 {
-    protected $name = 'odds';
+    protected $name = 'config';
 }

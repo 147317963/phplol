@@ -15,6 +15,9 @@ class Base extends BaseController
     public  $uid;
     //用户名
     public  $username;
+    //角色权限
+    public $roles;
+
 
     //配置数据
 //    public $webConfg;
@@ -42,7 +45,7 @@ class Base extends BaseController
 //        $controller = Request()->controller();
 //        dump($action);
 //        dump(stripos('login logout',$action));
-        if(stripos('login logout',$action) !== false ){
+        if(stripos('login logout register',$action) !== false ){
             return;
         }
 
@@ -90,14 +93,16 @@ class Base extends BaseController
         }
         $this->uid = $parse->getClaim('uid');
         $this->username = $parse->getClaim('username');
+        //角色权限 需要获得实时权限
+//        $this->roles = $parse->getClaim('roles');
 
         //验证唯一设备登录  把旧用户踢下线
-        $cache  =Cache::store('redis')->hGet(config('apicanche.user.hash'),$this->username);
-
-        if(md5($token) !== $cache['token']){
-            $data['message'] =  '温馨提示:您的会员账号已在其他终端登录。';
-            throw new \think\exception\HttpException(200, $data['message'],null,[],$data['code']);
-        }
+//        $cache  =Cache::store('redis')->hGet(config('apicanche.user.hash'),$this->username);
+//
+//        if(md5($token) !== $cache['token']){
+//            $data['message'] =  '温馨提示:您的会员账号已在其他终端登录。';
+//            throw new \think\exception\HttpException(200, $data['message'],null,[],$data['code']);
+//        }
 
         //获取储存数据数据
 

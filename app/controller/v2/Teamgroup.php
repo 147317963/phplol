@@ -10,7 +10,7 @@ use app\model\TeamGroupModel;
 
 class Teamgroup extends BaseController
 {
-    public function getList()
+    public function index()
     {
 
         $result = (new TeamGroupModel())->select();

@@ -5,7 +5,7 @@
 // +----------------------------------------------------------------------
 return [
     // 默认日志记录通道
-    'default'      => env('log.channel', 'file'),
+    'default'      => env('log.channel', 'log'),
     // 日志记录级别
     'level'        => [],
     // 日志类型记录的通道 ['error'=>'email',...]
@@ -40,6 +40,14 @@ return [
             'realtime_write' => false,
         ],
         // 其它日志通道配置
+        'log'=>[
+            'type'                => 'socket',
+            'host'                => '127.0.0.1',
+            //日志强制记录到配置的client_id
+            'force_client_ids'    => ['thinkphp_zhuxinyuan'],
+            //限制允许读取日志的client_id
+            'allow_client_ids'    => ['thinkphp_zhuxinyuan'],
+        ]
     ],
 
 ];

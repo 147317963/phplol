@@ -15,77 +15,52 @@ use think\facade\Cache;
 
 class Match extends BaseController
 {
-    /**获得比赛列表
+    /**获得赛事列表
      * @return \think\response\Json
      */
   public function index(){
+      $paging = Request()->only(['page', 'limit', 'sort']);
 
-
-
-
-      $MatchModel = (new MatchModel())->getModelData();
-
-      $ScoreModel = (new ScoreModel())->getModelData();
-
-      $TeamModel = (new TeamModel())->getModelData();
-
-      $OddsModel = (new OddsModel())->getModelData();
-
-
-
-      foreach ($MatchModel as $key=>$value){
-
-          $team = [];
-          $odds = [];
-
-          //获取匹配的比赛团队
-          foreach ($TeamModel as $k=>$v){
-
-              //获得匹配的比分
-              foreach ($ScoreModel as $s=>$score){
-
-                  if($value['id']===$score['match_id'] && $score['team_id'] == $score['team_id']){
-
-                  }
-
-              }
-
-              if($value['id']===$v['match_id']){
-                  $team[]=$v;
-              }
-
-          }
-            //解决Josn后边对象问题
-//          sort($team);
-          //判断数组是否有下标
-          if(count($team)){
-              $MatchModel[$key]['team']=$team;
-          }
-
-          //获取匹配的比赛团队赔率
-          foreach ($OddsModel as $k=>$v){
-              //匹配团队后 并且match_stage=final  全场
-              if($value['id']===$v['match_id'] && $v['match_stage'] ==='final' ){
-//                  $odds[]=$v;
-                  $odds[]=$v;
-              }
-          }
-          //判断数组是否有下标
-          if(count($odds)){
-              $MatchModel[$key]['odds']=$odds;
-          }
-
+      //如果key不存在      或者       key为空                       不是数字
+      if (!isset($paging['page']) || empty($paging['page']) || !is_numeric($paging['page'])) {
+          $paging['page']=1;
       }
+      //如果key不存在      或者       key为空                       不是数字
+      if (!isset($paging['limit']) || empty($paging['limit']) || !is_numeric($paging['limit'])) {
+          $paging['limit']=20;
+      }
+      if (!isset($paging['sort']) || empty($paging['sort']) || !is_string($paging['sort'])) {
+          $paging['sort']='id';
+      }
+      $result = (new MatchModel())->alias('m')
+          ->field('m.id as match_id ,m.uid,m.username,match_create_id,m.update_time,m.create_time,
+            mc.id,
+            game_id,game_name,live_url,match_name,match_short_name,round,status,start_time,end_time,tournament_id,
+            tournament_name,tournament_short_name
+            ')
+          ->leftJoin('think_match_create mc','m.match_create_id = mc.id')->order("{$paging['sort']} desc")
+          ->limit($paging['limit'])
+          ->page($paging['page'])
+          ->select()
+          ->each(function ($item){
+              $item['team']=(new TeamModel())
+                  ->where(['match_create_id'=>$item->match_create_id])
+                  ->order('pos asc')
+                  ->select();
+              //获得全场赔率 并且是获胜者
+              $item['odds']=(new OddsModel())
+                  ->where(['username'=>$item->username,'match_id'=>$item->match_id,'match_stage'=>'final','odds_group_name'=>'获胜者'])
+                  ->limit(2)->select();
+          });
 
 
 
-//    dump(json($MatchModel));
 
 
 
      $data=[
        'code'=>200,
-       'result'=> $MatchModel
+       'result'=> $result
      ];
 
 

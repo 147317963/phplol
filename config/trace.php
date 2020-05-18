@@ -4,7 +4,14 @@
 // +----------------------------------------------------------------------
 return [
     // 内置Html和Console两种方式 支持扩展
-    'type'    => 'Html',
+    'type'    => 'Console',
     // 读取的日志通道名
     'channel' => '',
+    'tabs' => [
+        'base'                 => '基本',
+        'file'                 => '文件',
+        'error|notice|warning' => '错误',
+        'sql'                  => 'SQL',
+        'debug|info'           => '调试',
+    ],
 ];
