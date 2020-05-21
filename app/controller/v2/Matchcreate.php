@@ -62,14 +62,12 @@ class Matchcreate extends Base
         $gamelist = Cache::store('redis')->hGetall(config('apicanche.game.hash'));
         $tournamentlist = Cache::store('redis')->hGetall(config('apicanche.tournament.hash'));
         if (!isset($gamelist[$data['game_id']]) || $gamelist[$data['game_id']]['game_name'] != $data['game_name']) {
-            return json(['code' => 500, 'message' => '参数1不匹配']);
+            return json(['code' => config('apicanche.erro'), 'message' => '参数1不匹配']);
         }
         if (!isset($tournamentlist[$data['tournament_id']]) || $tournamentlist[$data['tournament_id']]['tournament_name'] != $data['tournament_name'] || $tournamentlist[$data['tournament_id']]['tournament_short_name'] != $data['tournament_short_name']) {
-            return json(['code' => 500, 'message' => '参数2不匹配']);
+            return json(['code' => config('apicanche.erro'), 'message' => '参数2不匹配']);
         }
-//       dump($gamelist[$data['game_id']]);
-//        https://tc-tct.douyucdn2.cn/dyliveflv1/60937r1lhk2UMP8m_550p.flv?wsAuth=7d57b38318c80d2c59d3b198ab1af2a0&token=web-h5-0-60937-28e3e2ddb065abb25a02c16f29ff30eb3a0a97520395a5c7&logo=0&expire=0&did=e87182f8dc206fd3f4a595c700041501&ver=Douyu_220051305&pt=2&st=0&origin=all&mix=0&isp=
-//      $MatchModel->save($data);
+
 
 
     }
@@ -89,7 +87,7 @@ class Matchcreate extends Base
             return json($validate->getError());
         }
 
-        $MatchModel = (new MatchModel())->where(['id' => $data['id'], 'username' => $this->username])->find();
+        $MatchModel = (new MatchCreateModel())->where(['id' => $data['id'], 'username' => $this->username])->find();
 
         if ($MatchModel) {
 

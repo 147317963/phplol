@@ -116,8 +116,8 @@ Route::rule(':version/order',':version.Order/index');
 
 
 
-
-
+//解析视频
+Route::rule(':version/m3u8url',':version.M3u8url/raybet');
 
 
 

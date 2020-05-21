@@ -17,7 +17,7 @@ class Game extends BaseController
         $result = (new GameModel())->select();
 
         $data = [
-            'code' => 200,
+            'code' => config('apicanche.succeed'),
             'result' => $result
         ];
 

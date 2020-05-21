@@ -9,13 +9,11 @@ namespace app\controller\v1;
 use app\BaseController;
 use app\model\MatchModel;
 use app\model\OddsModel;
-use app\model\ScoreModel;
 use app\model\TeamModel;
-use think\facade\Cache;
 
 class Match extends BaseController
 {
-    /**获得赛事列表
+    /**用户获得比赛列表
      * @return \think\response\Json
      */
   public function index(){
@@ -59,8 +57,8 @@ class Match extends BaseController
 
 
      $data=[
-       'code'=>200,
-       'result'=> $result
+         'code' => config('apicanche.succeed'),
+         'result'=> $result
      ];
 
 

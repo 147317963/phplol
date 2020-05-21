@@ -44,7 +44,7 @@ class Announcement extends Base
 
 
         $data = [
-            'code' => 200,
+            'code' => config('apicanche.succeed'),
             'result' => $result
         ];
 

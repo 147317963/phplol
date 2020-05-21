@@ -122,7 +122,7 @@ class User extends Base
 
         //获取过期时间
         $data = [
-            'code' => 200,
+            'code' => config('apicanche.succeed'),
             'token' => $token['token'],
             'message' => '登入成功!',
             'exp' => $nowTime + config('apicanche.login.expire'),
@@ -136,7 +136,7 @@ class User extends Base
      */
     public function logout(){
         $data = [
-            'code' => 200,
+            'code' => config('apicanche.succeed'),
             'message' => '退出成功!',
         ];
         return json($data);
@@ -151,7 +151,7 @@ class User extends Base
     public function getInfo(){
         $result = (new UserModel())->where(['username'=>$this->username])->find();
         $data = [
-            'code' => 200,
+            'code' => config('apicanche.succeed'),
             'result' => $result
         ];
         return json($data);

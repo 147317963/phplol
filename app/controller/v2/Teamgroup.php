@@ -16,7 +16,7 @@ class Teamgroup extends BaseController
         $result = (new TeamGroupModel())->select();
 
         $data = [
-            'code' => 200,
+            'code' => config('apicanche.succeed'),
             'result' => $result
         ];
 

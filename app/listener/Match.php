@@ -37,49 +37,7 @@ class Match
 
 
 
-        $MatchModel = (new MatchModel())->getModelData();
 
-
-        $ScoreModel = (new ScoreModel())->getModelData();
-
-        $OddsModel = (new OddsModel())->getModelData();
-
-
-
-
-        foreach ($MatchModel as $key=>$value){
-
-            $team = [];
-            $odds = [];
-
-            //获取匹配的比赛团队
-            foreach ($ScoreModel as $k=>$v){
-
-                if($value['id']===$v['match_id']){
-                    $team[]=$v;
-                }
-            }
-            //判断数组是否有下标
-            if(count($team)){
-                $MatchModel[$key]['team']=$team;
-            }
-
-            //获取匹配的比赛团队
-            foreach ($OddsModel as $k=>$v){
-                //匹配团队后 并且match_stage=final  全场
-                if($value['id']===$v['match_id'] && $v['match_stage'] ==='final' ){
-                    $odds[]=$v;
-                }
-            }
-            //判断数组是否有下标
-            if(count($odds)){
-                $MatchModel[$key]['odds']=$odds;
-            }
-
-
-
-
-        }
 
 
 
@@ -89,7 +47,7 @@ class Match
 //        dump($event);
 //        $this->websocket->to('room')->emit("matchCallback", ['guangbo' => 1, 'getdata' => $event['asd']]);
         //回复客户端消息
-//        $this->websocket->emit("matchCallback",$this->websocket);
+        $this->websocket->emit("matchCallback",'11');
         //不同于HTTP模式，这里可以进行多次发送
         //$event 为从客户端接收的数据
 //        $this->websocket->emit("match", ['aaaaa' => 1, 'getdata' => $event['asd']]);
