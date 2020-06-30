@@ -9,10 +9,19 @@ use app\model\GameModel;
 use app\model\OddsGroupModel;
 use app\model\TeamModel;
 use app\model\TournamentModel;
-use think\db\Where;
 
 class Getdata extends BaseController
 {
+
+    public function getMatch(){
+        // 创建一个新cURL资源
+        $ch = curl_init();
+        // 设置URL和相应的选项
+        curl_setopt($ch, CURLOPT_URL, "https://incpgameinfo.esportsworldlink.com/v2/match?page=1&match_type=2");
+
+    }
+
+
     public function gameList()
     {
         // 创建一个新cURL资源

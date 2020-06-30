@@ -7,5 +7,5 @@ return [
     // \think\middleware\LoadLangPack::class,
     // Session初始化
     // \think\middleware\SessionInit::class
-//    'validate'  => app\controller\middleware\Validate::class
+    'RequestCheck'  => app\controller\middleware\RequestCheck::class
 ];

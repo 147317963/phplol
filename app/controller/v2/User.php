@@ -81,7 +81,7 @@ class User extends Base
         ->setIssuedAt($nowTime)//token创建时间
         ->setExpiration($nowTime + config('apicanche.login.expire'))//过期时间
         ->setNotBefore($nowTime)//当前时间在这个时间前，token不能使用
-        ->set('uid', $user['id'])//自定义数据
+        ->set('user_id', $user['id'])//自定义数据
         ->set('username', $user['username']) //自定义数据
         ->sign($signer, config('apicanche.secret'))//设置签名
         ->getToken();

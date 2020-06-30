@@ -10,6 +10,7 @@ class M3u8url extends BaseController
 {
     public function raybet()
     {
+//        socket_create()
         // 创建一个新cURL资源
         $url = Request()->param('url');
 

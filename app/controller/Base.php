@@ -12,7 +12,7 @@ use think\facade\Cache;
 class Base extends BaseController
 {
     //用户的UID
-    public  $uid;
+    public  $user_id;
     //用户名
     public  $username;
     //角色权限
@@ -91,7 +91,7 @@ class Base extends BaseController
 //            throw new \Swoole\ExitException(json_encode($data));
 
         }
-        $this->uid = $parse->getClaim('uid');
+        $this->user_id = $parse->getClaim('user_id');
         $this->username = $parse->getClaim('username');
         //角色权限 需要获得实时权限
 //        $this->roles = $parse->getClaim('roles');

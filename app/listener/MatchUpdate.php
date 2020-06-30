@@ -8,7 +8,7 @@ namespace app\listener;
 use think\Container;
 use think\swoole\Websocket;
 
-class Match
+class MatchUpdate
 {
     public $websocket = null;
     /**
@@ -35,7 +35,7 @@ class Match
 
 
 
-
+//        dump($event);
 
 
 
@@ -43,7 +43,7 @@ class Match
 
 
 //        dump($event);
-//        $this->websocket->to('room')->emit("matchCallback", ['guangbo' => 1, 'getdata' => $event['asd']]);
+        $this->websocket->to('match')->emit("matchCallback", $event);
         //回复客户端消息
 //        $this->websocket->emit("matchCallback",'11');
         //不同于HTTP模式，这里可以进行多次发送

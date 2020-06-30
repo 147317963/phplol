@@ -6,7 +6,6 @@ namespace app\controller\v1;
 
 use app\BaseController;
 use app\model\ConfigModel;
-
 class Config extends BaseController
 {
 
